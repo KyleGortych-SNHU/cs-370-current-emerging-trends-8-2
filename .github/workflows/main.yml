@@ -1,11 +1,29 @@
-name: main
+name: notebook-tests
 
 on:
-  workflow_dispatch:  # blank for now
+  push:
+    paths:
+      - "Gortych_Kyle_ProjectTwo.ipynb"
+  pull_request:
+    paths:
+      - "Gortych_Kyle_ProjectTwo.ipynb"
 
 jobs:
-  placeholder:
+  test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Placeholder
-        run: echo ""
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install pytest numpy
+
+      - name: Run tests
+        run: pytest -v
