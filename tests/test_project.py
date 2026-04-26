@@ -1,10 +1,16 @@
+import sys
+from unittest.mock import MagicMock
+
+# Mock tensorflow before importing modules
+sys.modules["tensorflow"] = MagicMock()
+
 import numpy as np
 
 from GameExperience import GameExperience
 from TreasureMaze import TreasureMaze
 
 
-# ---- Dummy model (fast, no TensorFlow) ----
+# Dummy model
 class DummyTensor:
     def __init__(self, arr):
         self._arr = arr
@@ -22,10 +28,7 @@ class DummyModel:
         return DummyTensor(np.ones((batch, self.output_shape[-1]), dtype=np.float32))
 
 
-# -----------------------
 # GameExperience tests
-# -----------------------
-
 def test_memory_limit():
     model = DummyModel(4)
     exp = GameExperience(model, model, max_memory=2)
@@ -66,10 +69,7 @@ def test_get_data():
     assert targets.shape == (3, 4)
 
 
-# -----------------------
 # TreasureMaze tests
-# -----------------------
-
 def test_maze_runs():
     maze = np.ones((3, 3))
     env = TreasureMaze(maze)
